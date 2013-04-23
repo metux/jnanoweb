@@ -47,4 +47,36 @@ public class StrUtil {
 
 		return oldpath+(oldpath.endsWith("/") ? "" : "/")+elem;
 	}
+
+	/**
+	 * split a pathname into its elements. empty elements (eg. "//") are skipped.
+	 *
+	 * @param path		pathname to be splitted
+	 * @result		array of pathname element strings
+	 */
+	public static String[] split_path(String path) {
+		if (path==null)
+			return new String[0];
+
+		String[] splitted = path.split("/");
+
+		if (splitted.length == 0)
+			return splitted;
+
+		int sz = 0;
+		for (int x=0; x<splitted.length; x++)
+			if (!isEmpty(splitted[x]))
+				sz++;
+
+		String[] cleaned = new String[sz];
+		sz = 0;
+		for (int x=0; x<splitted.length; x++) {
+			if (!isEmpty(splitted[x])) {
+				cleaned[sz] = splitted[x];
+				sz++;
+			}
+		}
+
+		return cleaned;
+	}
 }
