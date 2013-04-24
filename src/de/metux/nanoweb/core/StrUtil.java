@@ -79,4 +79,58 @@ public class StrUtil {
 
 		return cleaned;
 	}
+
+	/**
+	 * safe pathname normalization, eg. to prevent breaking out of an
+	 * web root via malicious URLs
+	 *
+	 * null/empty pathnames are translated to "/"
+	 * elements "." are just dropped
+	 * elements ".." cause previous element to be dropped
+	 * resulting pathname will be absolute, no leading "../" are left
+	 *
+	 * @param path	pathname to be normalized
+	 * @result	normalized pathname
+	 */
+	public static String safe_normalize_path(String path) {
+		if (isEmpty(path))
+			return "/";
+
+		String[] splitted = path.split("/");
+
+		if (splitted.length == 0)
+			return "/";
+
+		if (splitted.length == 1) {
+			if ((splitted[0].equals("..")) || (splitted[0].equals(".")))
+				return "/";
+			else
+				return "/"+splitted[0];
+		}
+
+		int count = 0; /* target counter */
+		for (int x=1; x<splitted.length; x++) {
+			/** go one element upwards **/
+			if (splitted[x].equals("..")) {
+				count = ((count == 0) ? 0 : (count-1));
+			}
+			/** just ignore "." **/
+			else if (splitted[x].equals(".") || splitted[x].equals("")) {
+			}
+			/** accepted element, copy it **/
+			else {
+				splitted[count] = splitted[x];
+				count++;
+			}
+		}
+
+		if (count==0)
+			return "/";
+
+		String res = "";
+		for (int x=0; x<count; x++)
+			res += "/"+splitted[x];
+
+		return res;
+	}
 }
