@@ -1,6 +1,7 @@
 package de.metux.nanoweb.example;
 
 import de.metux.nanoweb.daemon.MiniServer;
+import de.metux.nanoweb.fileserver.FileServerHandler;
 import de.metux.nanoweb.mount.MountEntry;
 import de.metux.nanoweb.mount.MountingHandler;
 
@@ -13,6 +14,10 @@ public class srv {
 		    new MountingHandler(
 		        d,
 		new MountEntry[] {
+			new MountEntry(
+			    "javadoc",
+			    new FileServerHandler("./javadoc/")
+			),
 			new MountEntry("foo", d),
 			new MountEntry("bar", d,
 			new MountEntry[]{
