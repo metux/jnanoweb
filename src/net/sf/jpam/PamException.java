@@ -64,19 +64,19 @@ package net.sf.jpam;
  * @version $Id: PamException.java,v 1.1 2004/08/18 12:27:20 gregluck Exp $
  */
 public class PamException extends Exception {
-    /**
-     * Constructor for the PamException object
-     */
-    public PamException() {
-        super();
-    }
+	/**
+	 * Constructor for the PamException object
+	 */
+	public PamException() {
+		super();
+	}
 
-    /**
-     * Constructor for the PamException object
-     * @param message
-     */
-    public PamException(String message) {
-        super(message);
-    }
+	/**
+	 * Constructor for the PamException object
+	 * @param message
+	 */
+	public PamException(String message) {
+		super(message);
+	}
 
 }
