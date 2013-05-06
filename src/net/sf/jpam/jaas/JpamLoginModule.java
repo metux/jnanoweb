@@ -55,8 +55,6 @@ package net.sf.jpam.jaas;
 
 import net.sf.jpam.Pam;
 import net.sf.jpam.PamReturnValue;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
@@ -83,7 +81,6 @@ import java.util.Map;
  * @version $Id: JpamLoginModule.java,v 1.5 2005/06/18 19:18:37 gregluck Exp $
  */
 public class JpamLoginModule implements LoginModule {
-	private static final Log LOG = LogFactory.getLog(JpamLoginModule.class.getName());
 	private static final String SERVICE_NAME_OPTION = "serviceName";
 	private Subject subject;
 	private CallbackHandler callbackHandler;
@@ -172,10 +169,8 @@ public class JpamLoginModule implements LoginModule {
 		try {
 			callbackHandler.handle(callbacks);
 		} catch (IOException e) {
-			LOG.error("IOException handling login: " + e.getMessage(), e);
 			throw new LoginException(e.getMessage());
 		} catch (UnsupportedCallbackException e) {
-			LOG.error("UnsupportedCallbackException handling login: " + e.getMessage(), e);
 			throw new LoginException(e.getMessage());
 		}
 		username = nameCallback.getName();
@@ -197,12 +192,12 @@ public class JpamLoginModule implements LoginModule {
 	private Pam createPam() {
 		String serviceName = (String)options.get(SERVICE_NAME_OPTION);
 		if (serviceName == null) {
-			LOG.debug("No serviceName configured in JAAS configuration file. Using default service name of "
-			          + Pam.DEFAULT_SERVICE_NAME);
+			System.out.println("No serviceName configured in JAAS configuration file. Using default service name of "
+			                   + Pam.DEFAULT_SERVICE_NAME);
 			serviceName = Pam.DEFAULT_SERVICE_NAME;
 		} else {
-			LOG.debug("Using service name of "
-			          + serviceName + " from JAAS configuration file");
+			System.out.println("Using service name of "
+			                   + serviceName + " from JAAS configuration file");
 			serviceName = Pam.DEFAULT_SERVICE_NAME;
 		}
 		Pam pam = new Pam(serviceName);
