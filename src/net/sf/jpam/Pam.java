@@ -53,9 +53,6 @@
 
 package net.sf.jpam;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
  * The PAM bridging class. Most of the work is done here.
  * <p/>
@@ -71,7 +68,6 @@ import org.apache.commons.logging.LogFactory;
  * @version $Id: Pam.java,v 1.11 2005/06/18 19:18:37 gregluck Exp $
  */
 public class Pam {
-	private static final Log LOG = LogFactory.getLog(Pam.class.getName());
 	private static final String JPAM_SHARED_LIBRARY_NAME = "jpam";
 	private String serviceName;
 
@@ -81,10 +77,6 @@ public class Pam {
 	 * This service is expected to be configured in /etc/pam.d
 	 */
 	public static final String DEFAULT_SERVICE_NAME = "net-sf-" + JPAM_SHARED_LIBRARY_NAME;
-
-	static {
-		System.loadLibrary(JPAM_SHARED_LIBRARY_NAME);
-	}
 
 	/**
 	 * Creates a new Pam object configured to use the {@link #DEFAULT_SERVICE_NAME}
@@ -154,8 +146,6 @@ public class Pam {
 	 * @see #authenticateSuccessful(String, String)
 	 */
 	public PamReturnValue authenticate(String username, String credentials) throws NullPointerException {
-		boolean debug = LOG.isDebugEnabled();
-		LOG.debug("Debug mode active.");
 		if (serviceName == null) {
 			throw new NullPointerException("Service name is null");
 		} else if (username == null) {
@@ -164,7 +154,7 @@ public class Pam {
 			throw new NullPointerException("Credentials are null");
 		}
 		synchronized (Pam.class) {
-			PamReturnValue pamReturnValue = PamReturnValue.fromId(authenticate(serviceName, username, credentials, debug));
+			PamReturnValue pamReturnValue = PamReturnValue.fromId(authenticate(serviceName, username, credentials, /* debug */ false));
 			return pamReturnValue;
 		}
 	}
@@ -191,11 +181,4 @@ public class Pam {
 	 * @return an integer, which can be converted to a {@link PamReturnValue} using {@link PamReturnValue#fromId(int)}
 	 */
 	private native int authenticate(String serviceName, String username, String credentials, boolean debug);
-
-	/**
-	 * @return the system dependent name of the shared library the Pam class is expecting.
-	 */
-	public static String getLibraryName() {
-		return System.mapLibraryName(JPAM_SHARED_LIBRARY_NAME);
-	}
 }
