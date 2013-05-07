@@ -153,6 +153,12 @@ public interface IRequest {
 	public long getContentLength();
 
 	/**
+	 * get request body parameters (eg. for POST)
+	 *
+	 */
+	public Properties getBodyParameters() throws UnsupportedEncodingException, IOException;
+
+	/**
 	 * set reply status code
 	 *
 	 * @param code	(numerical) http response code

@@ -179,6 +179,22 @@ public class Request implements IRequest {
 	}
 
 	/**
+	 * get the request body parameters
+	 */
+	public Properties getBodyParameters()
+	throws UnsupportedEncodingException, IOException {
+		Integer sz = (int) (long) getContentLength();
+		if (sz<1)
+			throw new IOException("missing Content-Length header");
+		char[] b = new char[sz];
+		reader.read(b, 0, sz);
+		return StrUtil.decodeURLParameters(
+		    new String(b),
+		    "UTF-8"
+		);
+	}
+
+	/**
 	 * helper for adding a new header
 	 *
 	 * @param header	header name, skipping when null is passed
