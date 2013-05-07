@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Properties;
 
 /**
@@ -173,20 +172,10 @@ public class Request implements IRequest {
 	 */
 	public Properties getURLParameters(String enc)
 	throws UnsupportedEncodingException {
-		Properties pr = new Properties();
-		String params = getAttribute(IRequest.attribute_query);
-		if (StrUtil.isEmpty(params))
-			return pr;
-
-		String elem[] = params.split("&");
-		for (int x=0; x<elem.length; x++) {
-			String s2[] = elem[x].split("=");
-			pr.setProperty(
-			    URLDecoder.decode(s2[0], enc),
-			    URLDecoder.decode(s2[1], enc)
-			);
-		}
-		return pr;
+		return StrUtil.decodeURLParameters(
+		    getAttribute(IRequest.attribute_query),
+		    enc
+		);
 	}
 
 	/**

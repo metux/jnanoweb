@@ -1,5 +1,9 @@
 package de.metux.nanoweb.core;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Properties;
+
 /**
  * little collection of string operation helpers
  */
@@ -132,5 +136,30 @@ public class StrUtil {
 			res += "/"+splitted[x];
 
 		return res;
+	}
+
+	/**
+	 * parse URL parameter list
+	 *
+	 * @param params	urlencod'ed parameter list
+	 * @param enc		character encoding
+	 */
+	public static Properties decodeURLParameters(String params, String enc)
+	throws UnsupportedEncodingException {
+		Properties pr = new Properties();
+		if (StrUtil.isEmpty(params))
+			return pr;
+
+		String elem[] = params.split("&");
+		for (int x=0; x<elem.length; x++) {
+			String s2[] = elem[x].split("=");
+			if (s2.length > 1) {
+				pr.setProperty(
+				    URLDecoder.decode(s2[0], enc),
+				    URLDecoder.decode(s2[1], enc)
+				);
+			}
+		}
+		return pr;
 	}
 }
