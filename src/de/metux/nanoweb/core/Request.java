@@ -107,6 +107,24 @@ public class Request implements IRequest {
 	}
 
 	/**
+	 * get the content length from request header
+	 *
+	 * @result	content length in bytes, -1 if no header present
+	 * @interface	IRequest
+	 */
+	public long getContentLength() {
+		String h = headers.getProperty(IRequest.header_content_length);
+		if (StrUtil.isEmpty(h))
+			return -1;
+
+		try {
+			return Long.parseLong(h.trim());
+		} catch (NumberFormatException e) {
+			return -1;
+		}
+	}
+
+	/**
 	 * retrieve various request metadata (socket addresses, etc)
 	 *
 	 * @interface IRequest

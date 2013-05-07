@@ -83,7 +83,7 @@ public class FileServerHandler implements IHandler {
 			FileInputStream is = new FileInputStream(path);
 
 			request.replyHeader(IRequest.header_content_type, mimetype);
-			request.replyHeader(IRequest.header_content_size, String.valueOf(size));
+			request.replyHeader(IRequest.header_content_length, String.valueOf(size));
 
 			byte buffer[] = new byte[4096];
 			int sz;

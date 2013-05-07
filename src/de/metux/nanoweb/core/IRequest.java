@@ -51,7 +51,7 @@ public interface IRequest {
 	/** standard HTTP headers **/
 	public static final String header_virtual_host = "Host";
 	public static final String header_content_type = "Content-Type";
-	public static final String header_content_size = "Content-Size";
+	public static final String header_content_length = "Content-Length";
 
 	/**
 	 * retrieve a full URI of the (original) request
@@ -144,6 +144,13 @@ public interface IRequest {
 	 * @param value	attribute value (null not allowed)
 	 */
 	public void setAttribute(String name, String value);
+
+	/**
+	 * get the content length from request header
+	 *
+	 * @result	content length in bytes, -1 if no header present
+	 */
+	public long getContentLength();
 
 	/**
 	 * set reply status code
