@@ -17,4 +17,14 @@ public interface IPropertiesLookup {
 	 */
 	public Properties lookup(String key)
 	throws ServiceFailure;
+
+	/**
+	 * set a property
+	 *
+	 * @param key		key of the property list to be updated
+	 * @param property	key of the property to be updated
+	 * @param value		new value
+	 */
+	public boolean update(String key, String property, String value)
+	throws ServiceFailure;
 }
