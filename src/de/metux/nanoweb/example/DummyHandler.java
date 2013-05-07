@@ -15,15 +15,10 @@ public class DummyHandler implements IHandler {
 	throws IOException {
 		request.replyHeader("Server", "nanoweb dummy");
 
-		if (!request.getRequestMethod().equals("GET")) {
-			request.replyStatus(IRequest.status_teapot, "I'm a teapot");
-			request.replyBody("I only support GET requests, and I'm just a teapot anyways");
-			return false;
-		}
-
 		request.replyStatus(IRequest.status_ok, "OK");
 		request.replyHeader("Content-Type", "text/plain");
 
+		request.replyBody("Method="+request.getRequestMethod()+"\n");
 		request.replyBody("URI="+request.getURI()+"\n");
 		request.replyBody("Root="+request.getRoot()+"\n");
 		request.replyBody("Path="+request.getPath()+"\n");
@@ -43,6 +38,24 @@ public class DummyHandler implements IHandler {
 
 		{
 			Properties q = request.getURLParameters();
+			Enumeration<?> e = q.propertyNames();
+			while (e.hasMoreElements()) {
+				String key = (String) e.nextElement();
+				request.replyBody(key+"=\""+q.getProperty(key)+"\"\n");
+			}
+		}
+
+		if (request.getRequestMethod().equals("POST")) {
+			request.replyBody("POST PARAMETERS:\n");
+			Properties q = request.getBodyParameters();
+			Enumeration<?> e = q.propertyNames();
+			while (e.hasMoreElements()) {
+				String key = (String) e.nextElement();
+				request.replyBody(key+"=\""+q.getProperty(key)+"\"\n");
+			}
+		} else if (request.getRequestMethod().equals("PUT")) {
+			request.replyBody("PUT PARAMETERS:\n");
+			Properties q = request.getBodyParameters();
 			Enumeration<?> e = q.propertyNames();
 			while (e.hasMoreElements()) {
 				String key = (String) e.nextElement();
