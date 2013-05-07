@@ -45,11 +45,25 @@ public class RESTPropertiesLookupHandler implements IHandler {
 
 		try
 		{
-			Properties list = lookup.lookup(param);
-			if (list == null) {
-				request.replyStatus(IRequest.status_not_found, "NOT FOUND");
-			} else
-			{
+			if (request.getRequestMethod().equals("POST")) {
+				Properties params = request.getBodyParameters();
+				Enumeration<?> e = params.propertyNames();
+				while (e.hasMoreElements()) {
+					String key = (String) e.nextElement();
+					if (!lookup.update(param, key, params.getProperty(key))) {
+						request.replyStatus(IRequest.status_forbidden, "ACCESS DENIED");
+						request.replyBody("Cannot write property "+param+"/"+key+"\n");
+						return true;
+					}
+				}
+				request.replyStatus(IRequest.status_ok, "OK");
+			} else {
+				Properties list = lookup.lookup(param);
+				if (list == null) {
+					request.replyStatus(IRequest.status_not_found, "NOT FOUND");
+					return true;
+				}
+
 				request.replyStatus(IRequest.status_ok, "OK "+list.size());
 				Enumeration<?> e = list.propertyNames();
 				while (e.hasMoreElements()) {
