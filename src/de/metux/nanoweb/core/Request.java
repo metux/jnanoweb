@@ -96,7 +96,7 @@ public class Request implements IRequest {
 	 */
 	public String getRequestMethod() {
 		String s = attributes.getProperty(IRequest.attribute_method);
-		return ((s==null) ? "" : s);
+		return ((s==null) ? "" : s.toUpperCase());
 	}
 
 	/**
