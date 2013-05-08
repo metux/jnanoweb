@@ -3,6 +3,9 @@ EXECUTABLE=testserver
 MAIN_CLASS=de.metux.nanoweb.example.srv
 GCJ_ARGS=
 
+PREFIX?=/usr
+SBINDIR?=$(PREFIX)/sbin
+
 compile:	$(EXECUTABLE)
 
 $(EXECUTABLE):
@@ -25,3 +28,8 @@ policy:
 
 doc:
 	@javadoc -d javadoc `find src -name "*.java"`
+
+install:	$(EXECUTABLE)
+	@mkdir -p $(DESTDIR)/$(SBINDIR)
+	@cp $(EXECUTABLE) $(DESTDIR)/$(SBINDIR)
+	@chmod u+x $(DESTDIR)/$(SBINDIR)/$(EXECUTABLE)
