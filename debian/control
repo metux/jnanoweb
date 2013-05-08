@@ -1,0 +1,13 @@
+Source: jnanoweb-testing
+Section: web
+Priority: extra
+Maintainer: Enrico Weigelt, metux IT service <weigelt@metux.de>
+Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 7), gcj-jdk, libpam-dev, libpostgresql-jdbc-java
+
+Package: jnanoweb-testing
+Architecture: any
+Pre-Depends: debconf
+Depends:  ${misc:Depends}, gcj-jdk
+Description: JNanoweb example server
+

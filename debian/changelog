@@ -1,0 +1,5 @@
+jnanoweb-testing (0.0.0.1-precise1) precise; urgency=low
+
+  * Packaging for Ubuntu precise
+
+ -- Enrico Weigelt, metux IT service <weigelt@metux.de>  Wed, 08 May 2013 16:35:13 +0200
