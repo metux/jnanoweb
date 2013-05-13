@@ -1,28 +1,35 @@
 
 EXECUTABLE=testserver
 MAIN_CLASS=de.metux.nanoweb.example.srv
-GCJ_ARGS=-rdynamic -fjni
+GCJ_ARGS=-rdynamic -fjni $(PG_JAR)
 
 JNI_HEADER=tmp/jni/net_sf_jpam_Pam.h
 JNI_OBJECT=tmp/jni/pam_native.o
 JNI_SOURCE=src/Pam.c
 
 PAM_LIBS=-lpam
+PG_JAR=/usr/share/java/postgresql.jar
+PG_OBJECT=tmp/postgresql-driver.o
 
 PREFIX?=/usr
 SBINDIR?=$(PREFIX)/sbin
 
+CLASSPATH=$(PG_JAR)
+
 compile:	$(EXECUTABLE)
 
-$(EXECUTABLE):	$(JNI_OBJECT)
+$(PG_OBJECT):	$(PG_JAR)
+	gcj -c $(PG_JAR) -o $(PG_OBJECT)
+
+$(EXECUTABLE):	$(JNI_OBJECT)	$(PG_OBJECT)
 	@echo "Building $@"
 	@rm -Rf classes
 	@mkdir -p classes
-	@javac -d classes `find src -name "*.java"`
-	@gcj $(GCJ_ARGS) -rdynamic -fjni `find src -name "*.java"` $(JNI_OBJECT) $(PAM_LIBS) -o $(EXECUTABLE) --main=$(MAIN_CLASS)
+	@javac -classpath $(CLASSPATH) -d classes `find src -name "*.java"`
+	@gcj -classpath $(CLASSPATH) $(PG_OBJECT) $(GCJ_ARGS) -rdynamic -fjni `find src -name "*.java"` $(JNI_OBJECT) $(PAM_LIBS) -o $(EXECUTABLE) --main=$(MAIN_CLASS)
 
 clean:
-	@rm -Rf tmp classes $(JNI_OBJECT) $(JNI_HEADER)
+	@rm -Rf tmp classes $(JNI_OBJECT) $(JNI_HEADER) $(PG_OBJECT)
 
 run:	compile
 	./$(EXECUTABLE)
